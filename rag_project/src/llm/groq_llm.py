@@ -1,10 +1,18 @@
 from groq import Groq
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
+# ❌ Not needed in deployment
+# import os
+# from dotenv import load_dotenv
+# load_dotenv()
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+import streamlit as st
+from groq import Groq
+
+# ✅ Correct way (use Streamlit secrets)
+client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+
+# ❌ This overrides above and breaks deployment
+# client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def generate_answer(query, context_chunks):
     context = "\n\n".join(context_chunks)
