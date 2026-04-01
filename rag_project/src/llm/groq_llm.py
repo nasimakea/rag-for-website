@@ -1,20 +1,19 @@
-from groq import Groq
-
-# ❌ Not needed in deployment
-# import os
-# from dotenv import load_dotenv
-# load_dotenv()
-
 import streamlit as st
 from groq import Groq
 
-# ✅ Correct way (use Streamlit secrets)
-client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
-# ❌ This overrides above and breaks deployment
-# client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+def get_groq_client():
+    api_key = st.secrets.get("GROQ_API_KEY")
+
+    if not api_key:
+        raise ValueError("❌ GROQ_API_KEY not found in Streamlit secrets")
+
+    return Groq(api_key=api_key)
+
 
 def generate_answer(query, context_chunks):
+    client = get_groq_client()  # ✅ initialize safely
+
     context = "\n\n".join(context_chunks)
 
     prompt = f"""
@@ -33,7 +32,8 @@ If answer is not in context, say "I don't know".
         model="llama-3.1-8b-instant",
         messages=[
             {"role": "user", "content": prompt}
-        ]
+        ],
+        temperature=0.2  # ✅ more controlled answers
     )
 
-    return response.choices[0].message.content
+    return response.choices[0].message.content.strip()
