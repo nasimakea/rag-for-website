@@ -1,23 +1,25 @@
-import streamlit as st
 from groq import Groq
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-def get_groq_client():
-    api_key = st.secrets.get("GROQ_API_KEY")
+api_key = os.getenv("GROQ_API_KEY")
+if not api_key:
+    raise ValueError("GROQ_API_KEY not found in .env")
 
-    if not api_key:
-        raise ValueError("❌ GROQ_API_KEY not found in Streamlit secrets")
-
-    return Groq(api_key=api_key)
+client = Groq(api_key=api_key)
 
 
 def generate_answer(query, context_chunks):
-    client = get_groq_client()  # ✅ initialize safely
+    if not context_chunks:
+        return "No relevant context found."
 
-    context = "\n\n".join(context_chunks)
+    context = "\n\n".join(context_chunks)[:3000]
 
     prompt = f"""
-You are an AI assistant. Answer ONLY from the given context.
+Answer the question ONLY using the provided context.
+Do NOT use prior knowledge.
 
 Context:
 {context}
@@ -25,15 +27,20 @@ Context:
 Question:
 {query}
 
-If answer is not in context, say "I don't know".
+If the answer is not explicitly in the context, say "I don't know".
 """
 
-    response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.2  # ✅ more controlled answers
-    )
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            temperature=0,
+            messages=[
+                {"role": "system", "content": "You are a helpful AI assistant."},
+                {"role": "user", "content": prompt}
+            ]
+        )
 
-    return response.choices[0].message.content.strip()
+        return response.choices[0].message.content.strip()
+
+    except Exception as e:
+        return f"Error: {str(e)}"
