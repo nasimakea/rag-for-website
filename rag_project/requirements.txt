@@ -1,0 +1,14 @@
+requests
+beautifulsoup4
+langchain
+langchain-text-splitters
+faiss-cpu
+Groq
+python-dotenv
+streamlit
+torchvision # to load images when asnwering the questions
+
+huggingface_hub
+
+
+#AIzaSyC2EG9MmgFQrLnAlakyqHfVUQeluMiARQQ
