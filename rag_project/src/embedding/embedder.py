@@ -6,8 +6,7 @@ load_dotenv()
 api_key=os.getenv("embedding_api_key")
 
 
-# Initialize the client
-# This automatically uses the new 'router.huggingface.co' under the hood
+
 client = InferenceClient(api_key=api_key)
 
 import time

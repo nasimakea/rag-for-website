@@ -1,23 +1,67 @@
 import streamlit as st
 from src.pipeline.rag_pipeline import RAGPipeline
 
-st.set_page_config(page_title="RAG Chatbot", layout="centered")
+# Page config
+st.set_page_config(
+    page_title="🌐 Website RAG Chatbot",
+    layout="centered"
+)
 
-st.title("🤖 Website RAG Chatbot")
+st.title("🌐 Website RAG Chatbot")
 
-# Initialize pipeline
+# --------------------------
+# SESSION STATE
+# --------------------------
 if "pipeline" not in st.session_state:
-    pipeline = RAGPipeline("https://www.dancingnumbers.com/")
-    pipeline.build_index()
-    st.session_state.pipeline = pipeline
+    st.session_state.pipeline = None
 
-# User input
-query = st.text_input("Ask your question:")
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
-if st.button("Ask"):
-    if query:
-        with st.spinner("Thinking..."):
+# --------------------------
+# INPUT: URL
+# --------------------------
+url = st.text_input("🔗 Enter Website URL")
+
+if st.button("🚀 Build Index"):
+    if not url:
+        st.warning("Please enter a valid URL")
+    else:
+        with st.spinner("Building index... ⏳"):
+            try:
+                pipeline = RAGPipeline(url)
+                pipeline.build_index()
+                st.session_state.pipeline = pipeline
+                st.success("✅ Index built successfully!")
+            except Exception as e:
+                st.error(f"Error: {e}")
+
+# --------------------------
+# CHAT UI
+# --------------------------
+st.divider()
+st.subheader("💬 Ask Questions")
+
+query = st.text_input("Your question")
+
+if st.button("Get Answer"):
+    if not st.session_state.pipeline:
+        st.warning("⚠️ Please build index first!")
+    elif not query:
+        st.warning("⚠️ Enter a question")
+    else:
+        with st.spinner("Thinking... 🤖"):
             answer = st.session_state.pipeline.query(query)
 
-        st.success("Answer:")
-        st.write(answer)
+            # Save chat history
+            st.session_state.chat_history.append(("You", query))
+            st.session_state.chat_history.append(("Bot", answer))
+
+# --------------------------
+# DISPLAY CHAT
+# --------------------------
+for role, message in st.session_state.chat_history:
+    if role == "You":
+        st.markdown(f"**🧑 You:** {message}")
+    else:
+        st.markdown(f"**🤖 Bot:** {message}")

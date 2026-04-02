@@ -11,19 +11,19 @@ print("🔹 Starting RAG pipeline...")
 
 # Step 1: Scrape
 raw_text = scrape_website(url)
-print("✅ Scraping done")
+print("Scraping done")
 
 # Step 2: Clean
 cleaned_text = clean_text(raw_text)
-print("✅ Cleaning done")
+print("Cleaning done")
 
 # Step 3: Chunk
 chunks = split_text(cleaned_text)
-print(f"✅ Chunking done: {len(chunks)} chunks")
+print(f"Chunking done: {len(chunks)} chunks")
 
 # Step 4: Embed
 embeddings = embed_chunks(chunks)
-print("✅ Embedding done")
+print(" Embedding done")
 
 print(f"Embedding shape: {len(embeddings)}")
 
@@ -38,7 +38,7 @@ if len(embeddings) > 0:
 
 # Step 5: Create Vector Store
 vector_store = VectorStore(embeddings, chunks)
-print("✅ FAISS index created")
+print("FAISS index created")
 
 # Step 6: Test Query
 query = "What services does this website provide?"
@@ -47,7 +47,7 @@ query_embedding = embed_chunks([query])[0]
 
 results = vector_store.search(query_embedding, k=3)
 
-print("\n🔍 Retrieved Chunks:\n")
+print("\n Retrieved Chunks:\n")
 for i, r in enumerate(results):
     print(f"\nResult {i+1}:\n{r[:300]}")
 
@@ -57,10 +57,10 @@ query = "What services does this website provide?"
 query_embedding = embed_chunks([query])[0]
 results = vector_store.search(query_embedding, k=3)
 
-print("\n🔍 Retrieved Chunks Done")
+print("\n Retrieved Chunks Done")
 
 # 🧠 LLM Answer
 answer = generate_answer(query, results)
 
-print("\n🤖 Final Answer:\n")
+print("\n Final Answer:\n")
 print(answer)
