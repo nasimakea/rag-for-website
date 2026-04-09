@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-url="https://www.dancingnumbers.com/"
+
 
 
 def scrape_website(url: str) -> str:
@@ -30,24 +30,8 @@ def scrape_website(url: str) -> str:
 
     return clean_text
 
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-
-def chunk_text(text):
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500,      # size of each chunk
-        chunk_overlap=100    # overlap for context continuity
-    )
-
-    chunks = splitter.split_text(text)
-    return chunks
 
     
 
-text = scrape_website(url)
 
-chunks = chunk_text(text)
-
-print(f"Total chunks: {len(chunks)}")
-print("\nFirst chunk:\n")
-print(chunks[0])

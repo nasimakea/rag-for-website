@@ -1,4 +1,4 @@
-import logging
+from src.utils.logger import logging
 from src.scraping.scraper import scrape_website
 from src.processing.cleaner import clean_text
 from src.processing.splitter import split_text
@@ -16,7 +16,7 @@ class RAGPipeline:
 
     def build_index(self):
         try:
-            logging.info("🔄 Building RAG index...")
+            logging.info(" Building RAG index...")
 
             raw_text = scrape_website(self.url)
             cleaned_text = clean_text(raw_text)
@@ -25,10 +25,10 @@ class RAGPipeline:
 
             self.vector_store = VectorStore(embeddings, chunks)
 
-            logging.info("✅ RAG index ready!")
+            logging.info(" RAG index ready!")
 
         except Exception as e:
-            logging.error(f"❌ Error building index: {e}")
+            logging.error(f"  Error building index: {e}")
             raise
 
     def query(self, question: str):
@@ -44,5 +44,5 @@ class RAGPipeline:
             return answer
 
         except Exception as e:
-            logging.error(f"❌ Query failed: {e}")
+            logging.error(f"  Query failed: {e}")
             return "Something went wrong while generating answer."

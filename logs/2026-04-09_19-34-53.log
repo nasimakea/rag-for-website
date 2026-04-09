@@ -1,0 +1,10 @@
+[ 2026-04-09 19:34:58,743 ] INFO - Loading faiss with AVX2 support.
+[ 2026-04-09 19:34:58,766 ] INFO - Successfully loaded faiss with AVX2 support.
+[ 2026-04-09 19:36:05,143 ] INFO - \U0001f504 Building RAG index...
+[ 2026-04-09 19:36:07,097 ] INFO - HTTP Request: GET https://huggingface.co/api/models/BAAI/bge-m3?expand=inferenceProviderMapping "HTTP/1.1 200 OK"
+[ 2026-04-09 19:36:07,362 ] INFO - HTTP Request: GET https://huggingface.co/api/models/BAAI/bge-m3 "HTTP/1.1 200 OK"
+[ 2026-04-09 19:36:09,323 ] INFO - HTTP Request: POST https://router.huggingface.co/hf-inference/models/BAAI/bge-m3/pipeline/feature-extraction "HTTP/1.1 200 OK"
+[ 2026-04-09 19:36:10,658 ] INFO - HTTP Request: POST https://router.huggingface.co/hf-inference/models/BAAI/bge-m3/pipeline/feature-extraction "HTTP/1.1 200 OK"
+[ 2026-04-09 19:36:10,819 ] INFO - \u2705 RAG index ready!
+[ 2026-04-09 19:36:28,156 ] INFO - HTTP Request: POST https://router.huggingface.co/hf-inference/models/BAAI/bge-m3/pipeline/feature-extraction "HTTP/1.1 200 OK"
+[ 2026-04-09 19:36:28,541 ] INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"

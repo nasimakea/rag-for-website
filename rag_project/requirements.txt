@@ -11,4 +11,3 @@ torchvision # to load images when asnwering the questions
 huggingface_hub
 
 
-#AIzaSyC2EG9MmgFQrLnAlakyqHfVUQeluMiARQQ
